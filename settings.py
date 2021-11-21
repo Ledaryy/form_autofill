@@ -6,6 +6,7 @@ PASSWORD = os.environ["TNT_PASSWORD"]
 # Configs
 URL_ENDPOINT="https://mytnt.tnt.com"
 FILE_NAME="template.xlsx"
+
 # Box config
 LENGTH = "35"
 WIDTH = "25"
