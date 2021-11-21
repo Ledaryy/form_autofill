@@ -1,5 +1,14 @@
+# Author: Andras Kulisov
+# Copyright: Peter Kulisov <peter.kulisov@gmail.com>
+# If there are any issues contact me on the email above.
+#
+# Version 1.0
+# Date: 2021-11
+
+
 import random
 import pandas as pd
+import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.expected_conditions import (
@@ -9,37 +18,48 @@ from selenium.webdriver.support.expected_conditions import (
 from settings import (
     USERNAME,
     PASSWORD,
+    FILE_NAME
 )
 
 def create_template():
     try:
-        df = pd.DataFrame(columns=['id', 'ref_num', 'name_surname', 'phone', 'address', 'postcode'])
-        df.to_excel('template.xlsx', index=False)
+        df = pd.DataFrame(columns=['id', 'ref_num', 'name_surname', 'phone', 'address', 'postcode', 'status'])
+        df.to_excel(FILE_NAME, index=False)
         print("Success")
     except Exception as e:
-        print(f"Error details: {e}")
-        print("Error occured, contact Peter")
+        raise Exception(f"I cannot create template, Error details: {e}")
 
 def data_quality_check(df):
-    random_data = []
-    for i in range(5):
-        row_number = random.randint(0, (df.index.stop - 1))
-        print(row_number)
-        data_row = df.iloc[row_number]
-        random_data.append(data_row)
-    print("Some random samples of data: ")
-    for i in random_data:
-        print(i)
+    try:
+        random_data = []
+        for i in range(5):
+            row_number = random.randint(0, (df.index.stop - 1))
+            print(row_number)
+            data_row = df.iloc[row_number]
+            random_data.append(data_row)
+        print("Some random samples of data: ")
+        for i in random_data:
+            print(i)
+    except Exception as e:
+        raise Exception(f"I cannot do data quality check, Error details: {e}")
 
 def fill_form(parent_form, by_tag, id, data):
-    while True:
-        form = parent_form.find_element(getattr(By,by_tag), id)
-        form.clear()
-        form.send_keys(f"{data}")
-        check_form = parent_form.find_element(getattr(By,by_tag), id)
+    try:
+        timeout = time.time() + 2   # 2 sec from now
+        while True:
+            form = parent_form.find_element(getattr(By,by_tag), id)
+            form.clear()
+            form.send_keys(f"{data}")
+            check_form = parent_form.find_element(getattr(By,by_tag), id)
 
-        if str(data) == str(check_form.get_attribute("value")):
-            break
+            if str(data) == str(check_form.get_attribute("value")):
+                break
+
+            if time.time() > timeout:
+                raise Exception("Fill form timed out")
+
+    except Exception as e:
+        raise Exception(f"I cannot fill form, Error details: {e}")
 
 def user_login(wait):
     try:
@@ -75,22 +95,33 @@ def create_shipment(wait):
         raise Exception(f"I cannot click on shipment button, Error details: {e}")
 
 def find_elements_with_text(wait, xpath, value):
-    all_forms = wait.until(presence_of_all_elements_located((By.XPATH, xpath)))
-    result = None
-    for form in all_forms:
-        if f"{value}" in form.text:
-            result = form
-    return result
+    try:
+        all_forms = wait.until(presence_of_all_elements_located((By.XPATH, xpath)))
+        result = None
+        for form in all_forms:
+            if f"{value}" in form.text:
+                result = form
+        return result
+    except Exception as e:
+        raise Exception(f"[Utils]: I cannot find elements with text, Error details: {e}")
 
 def find_and_click_button(wait, xpath):
-    button = wait.until(presence_of_element_located((
-        By.XPATH, xpath
-    )))
     try:
+        button = wait.until(presence_of_element_located((
+            By.XPATH, xpath
+        )))
+        timeout = time.time() + 2   # 2 sec from now
         while True:
-            button.click()
-    except Exception:
-        pass
+            try:
+                button.click()
+            except Exception:
+                break
+
+            if time.time() > timeout:
+                raise Exception("Click button timed out")
+
+    except Exception as e:
+        raise Exception(f"I cannot find and click button, Error details: {e}")
 
 def click_button(button):
     try:
@@ -100,9 +131,13 @@ def click_button(button):
         pass
 
 def find_checkbox_parent_with_text(wait, xpath, value):
-    while True:
-        checkboxes = wait.until(presence_of_all_elements_located((By.XPATH, xpath)))
-        for checkbox in checkboxes:
-            parent = checkbox.find_element_by_xpath('..')
-            if f"{value}" in parent.text:
-                return checkbox
+    try:
+
+        while True:
+            checkboxes = wait.until(presence_of_all_elements_located((By.XPATH, xpath)))
+            for checkbox in checkboxes:
+                parent = checkbox.find_element_by_xpath('..')
+                if f"{value}" in parent.text:
+                    return checkbox
+    except Exception as e:
+        raise Exception(f"I cannot find checkbox parent with text, Error details: {e}")

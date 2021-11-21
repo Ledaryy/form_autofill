@@ -35,8 +35,3 @@ python filling_forms.py
 # Notes
 Script using a username + password provided by user
 Script do not save any password, so the file with credentials should be provided by the user.
-
-
-<button data-e2e-id="mytnt.createShipment.pending" ng-if="ctrl.showQuoteForm &amp;&amp; ctrl.userSettings.hasEndOfDayProcess" ng-disabled="ctrl.isSaveShipmentDisabled || !ctrl.readyForOrder || !ctrl.isRegularCollection || ctrl.savingReadyToShip" ng-click="ctrl.handleSaveReadyToShip()" class="__c-btn-group__item __c-btn" ng-class="{ '__c-btn--loading': ctrl.savingReadyToShip }" type="button" disabled="disabled">
-Save shipment and print labels
-</button>
