@@ -16,7 +16,7 @@ download it from python website or microsoft app store
 pip3 install virtualenv
 
 3. create virtual envitement
-virtualenv venv
+python -m virtualenv venv
 
 4. enter your envirement
 venv\Scripts\Activate
@@ -35,3 +35,5 @@ python main.py
 # Notes
 Script using a username + password provided by user
 Script do not save any password, so the file with credentials should be provided by the user
+GitLens
+material theme
