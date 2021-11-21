@@ -15,7 +15,8 @@ from settings import *
 
 from mechanics import (
     filling_forms,
-    save_shipment
+    save_shipment,
+    data_parser
 )
 
 from utils import (
@@ -49,9 +50,15 @@ if decision_2 == "yes":
     data = pd.ExcelFile(file)
     df = data.parse(data.sheet_names[0])
 
-    # Check the data quality
-    data_quality_check(df)
+    # Parsing and validating the data
+    # Current settings:
+    # 1. Checks all column for empty values
+    # 2. Removing whitespaces from postcode
+    df = data_parser(df)
 
+    # User checks the data quality
+    data_quality_check(df)
+    
     # Filling the forms
     decision_3 = "yes"
     #decision_3 = input("Data looks right? (yes/no): ")

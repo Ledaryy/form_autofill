@@ -109,3 +109,28 @@ def save_shipment(driver, wait, row):
 
     except Exception as e:
         raise Exception(f"Saving shipment id: {row.loc['id']} failed, details {e}")
+
+def data_parser(df):
+    if df.empty:
+        raise Exception("No data to process")
+    if not df.loc[df['id'].isnull()].empty:
+        raise Exception("ID is empty")
+    if not df.loc[df['postcode'].isnull()].empty:
+        raise Exception("Postcode is empty")
+    if not df.loc[df['name_surname'].isnull()].empty:
+        raise Exception("Name and surname is empty")
+    if not df.loc[df['phone'].isnull()].empty:
+        raise Exception("Phone number is empty")
+    if not df.loc[df['address'].isnull()].empty:
+        raise Exception("Address is empty")
+    if not df.loc[df['ref_num'].isnull()].empty:
+        raise Exception("Reference number is empty")
+    
+    # Removing whitespaces from postcode
+    for i in range(len(df)):
+        post_code = df.loc[i, 'postcode']
+        post_code = ''.join(post_code.split())
+        df.loc[i, 'postcode'] = post_code
+        
+    return df
+         
