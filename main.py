@@ -73,36 +73,36 @@ def main_function(
             driver.get(URL_ENDPOINT)
             wait = WebDriverWait(driver, 10)
 
-                # Login user
-                user_login(wait)
+            # Login user
+            user_login(wait)
 
-                # Open the menu, create a shipment
-                create_shipment(wait)
+            # Open the menu, create a shipment
+            create_shipment(wait)
 
-                # TODO remove me for i in range(df.index.stop):
-                for i in range(df.index.stop):
-                    row = df.iloc[i]
-                    print(f"Processing form with id: {row.loc['id']}, ref_num: {row.loc['ref_num']}")
-                    try:
-                        filling_forms(driver, wait, row)
-                        save_shipment(driver, wait, row)
-                        row.loc['status'] = "Success"
-                        df.loc[i] = row
+            # TODO remove me for i in range(df.index.stop):
+            for i in range(df.index.stop):
+                row = df.iloc[i]
+                print(f"Processing form with id: {row.loc['id']}, ref_num: {row.loc['ref_num']}")
+                try:
+                    filling_forms(driver, wait, row)
+                    save_shipment(driver, wait, row)
+                    row.loc['status'] = "Success"
+                    df.loc[i] = row
 
-                    except Exception as e:
-                        print(f"Error {e} occured, skipping this form")
-                        row.loc['status'] = "Failed"
-                        df.loc[i] = row
+                except Exception as e:
+                    print(f"Error {e} occured, skipping this form")
+                    row.loc['status'] = "Failed"
+                    df.loc[i] = row
 
-            # Saving the status of the form
-            time_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            df.to_excel(f'report-{time_stamp}.xlsx', index=False)
+        # Saving the status of the form
+        time_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        df.to_excel(f'report-{time_stamp}.xlsx', index=False)
 
-            print(df)
-            print("Data filling completed, number of errors: ", df[df.status == "Failed"].shape[0])
-            print(f"Report was generated: report-{time_stamp}.xlsx")
-            print("If you want to see the report, open the file in your excel")
-            print("Thank you for using our amazing software")
-        else:
-            print("Ok, go correct the data")
+        print(df)
+        print("Data filling completed, number of errors: ", df[df.status == "Failed"].shape[0])
+        print(f"Report was generated: report-{time_stamp}.xlsx")
+        print("If you want to see the report, open the file in your excel")
+        print("Thank you for using our amazing software")
+    else:
+        print("Ok, go correct the data")
 
