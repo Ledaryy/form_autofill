@@ -15,7 +15,8 @@ from settings import *
 
 from mechanics import (
     filling_forms,
-    save_shipment
+    save_shipment,
+    data_parser
 )
 
 from utils import (
@@ -54,17 +55,23 @@ def main_function(
         data = pd.ExcelFile(file)
         df = data.parse(data.sheet_names[0])
 
-        # Check the data quality
-        data_quality_check(df)
+    # Parsing and validating the data
+    # Current settings:
+    # 1. Checks all column for empty values
+    # 2. Removing whitespaces from postcode
+    df = data_parser(df)
 
-        # Filling the forms
-        decision_3 = "yes"
-        #decision_3 = input("Data looks right? (yes/no): ")
-        
-        if decision_3 == "yes":
-            with webdriver.Chrome(ChromeDriverManager().install()) as driver:
-                driver.get(URL_ENDPOINT)
-                wait = WebDriverWait(driver, 10)
+    # User checks the data quality
+    data_quality_check(df)
+    
+    # Filling the forms
+    decision_3 = "yes"
+    #decision_3 = input("Data looks right? (yes/no): ")
+    
+    if decision_3 == "yes":
+        with webdriver.Chrome(ChromeDriverManager().install()) as driver:
+            driver.get(URL_ENDPOINT)
+            wait = WebDriverWait(driver, 10)
 
                 # Login user
                 user_login(wait)

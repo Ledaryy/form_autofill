@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 5. execute python script
 (venv)
-python filling_forms.py
+python main.py
 
 # Possible errors
 1. install this package: python-dotenv
@@ -34,6 +34,6 @@ python filling_forms.py
 
 # Notes
 Script using a username + password provided by user
-Script do not save any password, so the file with credentials should be provided by the user.
+Script do not save any password, so the file with credentials should be provided by the user
 GitLens
 material theme
