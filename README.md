@@ -37,3 +37,7 @@ Script using a username + password provided by user
 Script do not save any password, so the file with credentials should be provided by the user
 GitLens
 material theme
+python intellisens
+pyqt5 for gui
+qt designer for gui for gui :D
+pyuic5 new_gui.ui -o new_gui.py
