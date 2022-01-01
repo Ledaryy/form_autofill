@@ -1,6 +1,6 @@
-from PySide6.QtCore import*
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PyQt5.QtCore import*
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 class CircularProgress(QWidget):
     def __init__(self):
@@ -54,7 +54,14 @@ class CircularProgress(QWidget):
 
         #Create arc / circular progress
         paint.setPen(pen)
-        paint.drawArc(int(margin), int(margin), width, height, -90 * 16, int(-value) * 16)
+        paint.drawArc(
+            int(margin),
+            int(margin), 
+            width, 
+            height, 
+            -90 * 16, 
+            int(-value) * 16
+        )
        
         #END
         paint.end()
