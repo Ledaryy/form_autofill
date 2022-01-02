@@ -24,8 +24,13 @@ class CircularProgress(QWidget):
         #Set default size without layout
         self.resize(self.width, self.height)
 
+    #set value
+    def set_value(self, value):
+        self.value = value
+        self.repaint() # render progress bar after
+
     #paint event (DESIGN YOUR CIRCULAR PROGRESS HERE)
-    def paintEvent(self, e):
+    def paintEvent(self, event):
         #set progress parameters
         width = self.width - self.progress_width
         height = self.height - self.progress_width
@@ -37,6 +42,7 @@ class CircularProgress(QWidget):
         paint = QPainter()
         paint.begin(self)
         paint.setRenderHint(QPainter.Antialiasing) #remove pixelated edges
+        paint.setFont(QFont(self.font_family, self.font_size))
 
         #Create rectangle
         rect = QRect(0, 0, self.width, self.height)
@@ -63,5 +69,11 @@ class CircularProgress(QWidget):
             int(-value) * 16
         )
        
+       #create text
+        pen.setColor(QColor(self.text_color))
+        paint.setPen(pen)
+        paint.drawText(rect, Qt.AlignCenter, f"{self.value}{self.suffix}")
+
+
         #END
         paint.end()

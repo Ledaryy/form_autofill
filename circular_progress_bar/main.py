@@ -13,6 +13,10 @@ class MainWindow(QMainWindow):
         #Resize Window
         self.resize(500, 500)
 
+        #remove title bar
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
         #Create Container and layout
         self.container = QFrame()
         self.container.setStyleSheet("background-color: transparent")
@@ -26,6 +30,7 @@ class MainWindow(QMainWindow):
         #add slider
         self.slider = QSlider(Qt.Horizontal)
         self.slider.setRange(0, 100)
+        self.slider.valueChanged.connect(self.change_value)
 
         #add widgets
         self.layout.addWidget(self.progress, Qt.AlignCenter, Qt.AlignCenter)
@@ -38,7 +43,9 @@ class MainWindow(QMainWindow):
         #Show Window
         self.show()
 
-
+    #change value
+    def change_value(self, value):
+        self.progress.set_value(value)
 
 
 
